@@ -19,6 +19,8 @@ def setup_db(app):
     db.app = app
     db.init_app(app)
 
+    return db
+
 '''
 db_drop_and_create_all()
     drops the database tables and starts fresh
