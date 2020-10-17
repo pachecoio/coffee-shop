@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify
 from src.repositories.drink_repository import DrinkRepository
+from src.decorators import marshal_with
+from src.drinks.schemas import DrinkShortSchema
 
 blueprint = Blueprint("drinks_blueprint", __name__)
 
@@ -17,15 +19,10 @@ repository = DrinkRepository()
 """
 
 
-@blueprint.route("/drinks")
+@blueprint.route("/drinks", methods=["GET"])
+@marshal_with(DrinkShortSchema(many=True))
 def get_drinks():
-    drinks = repository.query.all()
-    return jsonify(
-        {
-            "success": True,
-            "drinks": [drink.short() for drink in drinks],
-        }
-    ), 200
+    return repository.query.all()
 
 
 """
@@ -36,6 +33,16 @@ def get_drinks():
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 """
+@blueprint.route("/drinks-detail", methods=["GET"])
+def get_drinks_detail():
+    drinks = repository.query.all()
+    return jsonify(
+        {
+            "success": True,
+            "drinks": [drink.long() for drink in drinks],
+        }
+    ), 200
+
 
 
 """
@@ -47,6 +54,15 @@ def get_drinks():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 """
+@blueprint.route("/drinks", methods=["POST"])
+def create_drink():
+    drinks = repository.query.all()
+    return jsonify(
+        {
+            "success": True,
+            "drinks": [drink.long() for drink in drinks],
+        }
+    ), 200
 
 
 """
