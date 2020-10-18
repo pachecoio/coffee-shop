@@ -54,6 +54,7 @@ def get_drinks_detail():
 
 @blueprint.route("/drinks", methods=["POST"])
 @parse_with(DrinkCreateSchema())
+@marshal_with(DrinkSchema())
 def create_drink(entity):
     return repository.insert(**entity)
 
