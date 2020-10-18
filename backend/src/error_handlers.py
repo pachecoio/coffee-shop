@@ -1,4 +1,6 @@
 from flask import jsonify
+from marshmallow import Schema, fields
+
 
 class ApiError(Exception):
     status_code = 400
@@ -12,5 +14,9 @@ class ApiError(Exception):
 
     def to_dict(self):
         rv = dict(self.payload or ())
-        rv['message'] = self.message
+        rv["message"] = self.message
         return rv
+
+
+class AuthError(ApiError):
+    status_code = 401

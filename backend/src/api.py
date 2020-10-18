@@ -5,8 +5,10 @@ import json
 from flask_cors import CORS
 
 from .database.models import db_drop_and_create_all, setup_db, Drink
-from .auth.auth import AuthError, requires_auth
+from .auth.auth import requires_auth
 from src.drinks import blueprint as drink_blueprint
+from src.error_handlers import AuthError, ApiError
+from src.decorators import marshal_with
 
 app = Flask(__name__)
 app.db = setup_db(app)
@@ -53,3 +55,19 @@ def unprocessable(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 """
+
+
+@app.errorhandler(AuthError)
+def auth_error(error):
+    return (
+        jsonify({"success": False, "message": error.message}),
+        error.status_code or 401,
+    )
+
+
+@app.errorhandler(ApiError)
+def api_error(error):
+    return (
+        jsonify({"success": False, "message": error.message}),
+        error.status_code or 400,
+    )

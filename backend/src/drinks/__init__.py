@@ -3,6 +3,7 @@ from src.repositories.drink_repository import DrinkRepository
 from src.decorators import marshal_with, parse_with
 from src.drinks.schemas import DrinkShortSchema, DrinkSchema, DrinkCreateSchema
 from src.helpers import DRINK_SUCCESS_TEMPLATE
+from src.auth import requires_auth
 
 blueprint = Blueprint("drinks_blueprint", __name__)
 
@@ -53,9 +54,10 @@ def get_drinks_detail():
 
 
 @blueprint.route("/drinks", methods=["POST"])
+@requires_auth(permission="post:drinks")
 @parse_with(DrinkCreateSchema())
 @marshal_with(DrinkSchema())
-def create_drink(entity):
+def create_drink(entity, payload):
     return repository.insert(**entity)
 
 
