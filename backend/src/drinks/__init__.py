@@ -4,6 +4,7 @@ from src.decorators import marshal_with, parse_with
 from src.drinks.schemas import DrinkShortSchema, DrinkSchema, DrinkCreateSchema
 from src.helpers import DRINK_SUCCESS_TEMPLATE
 from src.auth import requires_auth
+import json
 
 blueprint = Blueprint("drinks_blueprint", __name__)
 
@@ -37,8 +38,9 @@ def get_drinks():
 
 
 @blueprint.route("/drinks-detail", methods=["GET"])
+@requires_auth(permission="get:drinks-detail")
 @marshal_with(DrinkSchema(many=True), template=DRINK_SUCCESS_TEMPLATE)
-def get_drinks_detail():
+def get_drinks_detail(*args):
     return repository.query.all()
 
 
@@ -58,7 +60,10 @@ def get_drinks_detail():
 @parse_with(DrinkCreateSchema())
 @marshal_with(DrinkSchema())
 def create_drink(entity, payload):
-    return repository.insert(**entity)
+    return repository.insert(
+        title=entity.get("title"),
+        recipe=json.dumps(entity["recipe"])
+    )
 
 
 """

@@ -19,6 +19,13 @@ class DrinkShortSchema(DrinkSchema):
         ]
 
 
+class RecipeSchema(Schema):
+    name = fields.String()
+    color = fields.String()
+    parts = fields.Integer()
+
+
 class DrinkCreateSchema(Schema):
+    id = fields.Integer()
     title = fields.String(required=True)
-    recipe = fields.String(required=True)
+    recipe = fields.List(fields.Nested(RecipeSchema), required=True)
