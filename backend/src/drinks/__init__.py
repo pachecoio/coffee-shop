@@ -77,6 +77,17 @@ def create_drink(entity, payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 """
+@blueprint.route("/drinks/<int:id>", methods=["PATCH"])
+@requires_auth(permission="patch:drinks")
+@parse_with(DrinkCreateSchema())
+@marshal_with(DrinkSchema())
+def update_drink(entity, payload, id):
+    test = 1
+    return repository.update(
+        id,
+        title=entity.get("title"),
+        recipe=json.dumps(entity["recipe"])
+    )
 
 
 """
