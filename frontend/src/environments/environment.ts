@@ -1,6 +1,3 @@
-/* @TODO replace with your variables
- * ensure all variables on this page match your project
- */
 import * as auth0 from "./../../secrets.json";
 
 export const environment = {
