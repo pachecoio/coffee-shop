@@ -57,6 +57,7 @@ def marshal_with(schema, template=None):
                 status_code = entity.get(
                     "status_code", status_code
                 )
+            entity["success"] = True
             return jsonify(entity), status_code
 
         return decorated_function
