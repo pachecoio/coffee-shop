@@ -37,8 +37,8 @@ class BaseRepository(object):
                 status_code=404,
             )
         for key in kwargs.keys():
-            if hasattr(self.model, key):
-                setattr(self.model, key, kwargs.get(key))
+            if hasattr(entity, key):
+                setattr(entity, key, kwargs.get(key))
         self.session.add(entity)
         self.session.commit()
         self.session.refresh(entity)
@@ -48,4 +48,3 @@ class BaseRepository(object):
         entity = self.get(id)
         self.session.delete(entity)
         self.session.commit()
-        return "", 204

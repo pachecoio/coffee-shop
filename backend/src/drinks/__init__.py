@@ -61,8 +61,7 @@ def get_drinks_detail(*args):
 @marshal_with(DrinkSchema())
 def create_drink(entity, payload):
     return repository.insert(
-        title=entity.get("title"),
-        recipe=json.dumps(entity["recipe"])
+        title=entity.get("title"), recipe=json.dumps(entity["recipe"])
     )
 
 
@@ -77,16 +76,15 @@ def create_drink(entity, payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 """
+
+
 @blueprint.route("/drinks/<int:id>", methods=["PATCH"])
 @requires_auth(permission="patch:drinks")
 @parse_with(DrinkCreateSchema())
 @marshal_with(DrinkSchema())
 def update_drink(entity, payload, id):
-    test = 1
     return repository.update(
-        id,
-        title=entity.get("title"),
-        recipe=json.dumps(entity["recipe"])
+        id, title=entity.get("title"), recipe=json.dumps(entity["recipe"])
     )
 
 
@@ -100,3 +98,13 @@ def update_drink(entity, payload, id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 """
+
+
+@blueprint.route("/drinks/<int:id>", methods=["DELETE"])
+@requires_auth(permission="delete:drinks")
+def delete_drink(payload, id):
+    repository.delete(id)
+    return jsonify({
+        "success": True,
+        "id": id
+    })
