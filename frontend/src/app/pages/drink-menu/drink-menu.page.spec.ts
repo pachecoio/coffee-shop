@@ -1,18 +1,21 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpHandler } from "@angular/common/http";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { AngularDelegate, ModalController } from "@ionic/angular";
+import { DrinksService } from 'src/app/services/drinks.service';
 
-import { DrinkMenuPage } from './drink-menu.page';
+import { DrinkMenuPage } from "./drink-menu.page";
 
-describe('DrinkMenuPage', () => {
+describe("DrinkMenuPage", () => {
   let component: DrinkMenuPage;
   let fixture: ComponentFixture<DrinkMenuPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrinkMenuPage ],
+      declarations: [DrinkMenuPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+      providers: [ModalController, AngularDelegate, HttpClient, HttpHandler, DrinksService],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -21,7 +24,11 @@ describe('DrinkMenuPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    TestBed.resetTestingModule();
+  });
+
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
