@@ -10,41 +10,39 @@ from src.drinks import blueprint as drink_blueprint
 from src.error_handlers import AuthError, ApiError
 from src.decorators import marshal_with
 
-app = Flask(__name__)
-app.db = setup_db(app)
-CORS(app)
-app.register_blueprint(drink_blueprint)
 
-"""
-@TODO uncomment the following line to initialize the datbase
-!! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
-!! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
-"""
-# db_drop_and_create_all()
+def create_app():
+    app = Flask(__name__)
+    app.db = setup_db(app)
+    CORS(app)
 
+    """
+    @TODO uncomment the following line to initialize the datbase
+    !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
+    !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
+    """
+    # db_drop_and_create_all()
 
-## Error Handling
-"""
-Example error handling for unprocessable entity
-"""
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return (
+            jsonify({"success": False, "error": 422, "message": "unprocessable"}),
+            422,
+        )
 
+    @app.errorhandler(AuthError)
+    def auth_error(error):
+        return (
+            jsonify({"success": False, "message": error.message}),
+            error.status_code or 401,
+        )
 
-@app.errorhandler(422)
-def unprocessable(error):
-    return jsonify({"success": False, "error": 422, "message": "unprocessable"}), 422
+    @app.errorhandler(ApiError)
+    def api_error(error):
+        return (
+            jsonify({"success": False, "message": error.message}),
+            error.status_code or 400,
+        )
 
-
-@app.errorhandler(AuthError)
-def auth_error(error):
-    return (
-        jsonify({"success": False, "message": error.message}),
-        error.status_code or 401,
-    )
-
-
-@app.errorhandler(ApiError)
-def api_error(error):
-    return (
-        jsonify({"success": False, "message": error.message}),
-        error.status_code or 400,
-    )
+    app.register_blueprint(drink_blueprint)
+    return app
