@@ -1,7 +1,8 @@
 venv/
 .vscode/
 __pycache__/
-test.db
+coffee.db
+coffee_test.db
 node_modules
 
 # OS generated files #
