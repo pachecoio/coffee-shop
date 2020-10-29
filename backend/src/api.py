@@ -11,10 +11,12 @@ from src.error_handlers import AuthError, ApiError
 from src.decorators import marshal_with
 
 
-def create_app():
+def create_app(db_name=None):
     app = Flask(__name__)
-    app.db = setup_db(app)
+    app.db = setup_db(app, db_name=db_name)
     CORS(app)
+
+    app.db.create_all()
 
     """
     @TODO uncomment the following line to initialize the datbase
