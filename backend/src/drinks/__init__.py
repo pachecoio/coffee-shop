@@ -5,6 +5,8 @@ from src.drinks.schemas import DrinkShortSchema, DrinkSchema, DrinkCreateSchema
 from src.helpers import DRINK_SUCCESS_TEMPLATE
 from src.auth import requires_auth
 import json
+from src.error_handlers import ApiError
+from src.database.models import Drink
 
 blueprint = Blueprint("drinks_blueprint", __name__)
 
@@ -29,6 +31,11 @@ def get_drinks_detail(*args):
 @parse_with(DrinkCreateSchema())
 @marshal_with(DrinkSchema())
 def create_drink(entity, payload):
+    exists = repository.query.filter(Drink.title == entity.get("title")).all()
+    if exists:
+        raise ApiError(
+            message="There is already a drink with this title", status_code=409
+        )
     return repository.insert(
         title=entity.get("title"), recipe=json.dumps(entity["recipe"])
     )
