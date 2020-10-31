@@ -10,8 +10,6 @@ blueprint = Blueprint("drinks_blueprint", __name__)
 
 repository = DrinkRepository()
 
-## ROUTES
-
 
 @blueprint.route("/drinks", methods=["GET"])
 @marshal_with(DrinkShortSchema(many=True), template=DRINK_SUCCESS_TEMPLATE)

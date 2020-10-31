@@ -28,7 +28,9 @@ def create_app(db_name=None):
     @app.errorhandler(422)
     def unprocessable(error):
         return (
-            jsonify({"success": False, "error": 422, "message": "unprocessable"}),
+            jsonify(
+                {"success": False, "error": 422, "message": "unprocessable"}
+            ),
             422,
         )
 

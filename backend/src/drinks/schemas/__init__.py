@@ -15,7 +15,10 @@ class DrinkSchema(Schema):
 class DrinkShortSchema(DrinkSchema):
     def _build_recipes(self, obj):
         return [
-            [{"color": r["color"], "parts": r["parts"]} for r in json.loads(obj.recipe)]
+            [
+                {"color": r["color"], "parts": r["parts"]}
+                for r in json.loads(obj.recipe)
+            ]
         ]
 
 

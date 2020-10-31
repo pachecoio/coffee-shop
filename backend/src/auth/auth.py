@@ -10,8 +10,6 @@ AUTH0_DOMAIN = "thisk8brd.auth0.com"
 ALGORITHMS = ["RS256"]
 API_AUDIENCE = "http://localhost:4200/drinks"
 
-## Auth Header
-
 
 def get_token_auth_header():
     auth_header = request.headers.get("Authorization")
@@ -19,7 +17,7 @@ def get_token_auth_header():
         raise AuthError(message="You must be logged in.")
     try:
         return auth_header.split(" ")[1]
-    except:
+    except Exception:
         raise AuthError(message="Authorization malformed.")
 
 
@@ -65,7 +63,8 @@ def verify_decode_jwt(token):
 
         except jwt.JWTClaimsError:
             raise AuthError(
-                message="Incorrect claims. Please, check the audience and issuer."
+                message="Incorrect claims. Please"
+                " check the audience and issuer."
             )
         except Exception:
             raise AuthError(

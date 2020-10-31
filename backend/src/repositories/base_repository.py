@@ -2,9 +2,10 @@ from flask import jsonify, current_app
 from sqlalchemy import exc
 from src.error_handlers import ApiError
 
+
 class BaseRepository(object):
     name = "BaseRepository"
-    
+
     @property
     def session(self):
         return current_app.db.session

@@ -12,7 +12,10 @@ def parse_with(schema):
             if form_data:
                 data = {}
                 for key in form_data.keys():
-                    if form_data.getlist(key) and len(form_data.getlist(key)) > 1:
+                    if (
+                        form_data.getlist(key)
+                        and len(form_data.getlist(key)) > 1
+                    ):
                         data[key] = form_data.getlist(key)
                     else:
                         data[key] = form_data[key]
@@ -25,7 +28,9 @@ def parse_with(schema):
                     api_error = args[0]
                     if isinstance(api_error, ApiError):
                         return (
-                            jsonify({"error": True, "message": api_error.message}),
+                            jsonify(
+                                {"error": True, "message": api_error.message}
+                            ),
                             api_error.status_code,
                         )
                 return jsonify(error=True, messages=err.messages), 400
@@ -54,9 +59,7 @@ def marshal_with(schema, template=None):
                 template["data"][template["name"]] = entity
                 entity = template["data"]
             if isinstance(entity, dict):
-                status_code = entity.get(
-                    "status_code", status_code
-                )
+                status_code = entity.get("status_code", status_code)
             entity["success"] = True
             return jsonify(entity), status_code
 
@@ -73,14 +76,18 @@ def parse_request(arguments):
             params = request.args
             for argument in arguments:
                 if params.get(argument.name):
-                    data[argument.name] = argument.type(params.get(argument.name))
+                    data[argument.name] = argument.type(
+                        params.get(argument.name)
+                    )
                 elif argument.default:
                     data[argument.name] = argument.default
                 elif argument.required:
                     return (
                         jsonify(
                             error=True,
-                            messages="Parameter {} is required".format(argument.name),
+                            messages="Parameter {} is required".format(
+                                argument.name
+                            ),
                         ),
                         400,
                     )
